@@ -16,8 +16,10 @@ const sendForm = () => {
     });
     postData(body, () => {
       statusMessage.textContent = success;
-      form.querySelectorAll('input').forEach(item => item.value = '');
-      setTimeout(() => form.lastChild.remove(), 3000);
+      setTimeout(() => {
+        form.lastChild.remove();
+        form.querySelectorAll('input').forEach(item => item.value = '');
+      }, 3000);
     }, () => {
       statusMessage.textContent = error;
       console.error(error);

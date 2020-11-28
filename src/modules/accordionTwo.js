@@ -5,11 +5,11 @@ const accordionTwo = () => {
 
   questions.addEventListener('click', event => {
     let target = event.target;
-    if(target.matches('a')){
+    if(target.closest('.panel')){
       event.preventDefault();
       accordion.forEach(item => {
         item.querySelector('.collapse').classList.remove('in');
-        if (item.querySelector('a') === target){
+        if (item.closest('.panel') === target.closest('.panel')){
           item.querySelector('.collapse').classList.add('in')
         }
       }) 

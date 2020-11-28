@@ -10,20 +10,24 @@ const accordionOne = () => {
 
   document.querySelector('.constructor').addEventListener('click', event => {
     let target = event.target;
-    if (target.closest('a')) {
+    const elem = target.closest('.panel-heading');
+    
+    if (target.closest('.construct-btn')) {
       event.preventDefault();
-      const id = target.closest('a').href.split('#')[1];
-      if (target.closest('.collapse')) {
+      const id = target.closest('.construct-btn').getAttribute('href');
+      if (id) {
         target.closest('.collapse').classList.remove('in');
-        document.getElementById(id).classList.add('in');
-      } else if (target.closest('.panel-heading')) {
-        items.forEach(item => {
-          item.querySelector('.collapse').classList.remove('in');
-          if (item.querySelector('.collapse').id === id) {
-            document.getElementById(id).classList.add('in');
-          }
-        });
+        document.querySelector(id).classList.add('in');
       }
+    } else if (elem) {
+      event.preventDefault();
+      const id = elem.querySelector('a').href.split('#')[1];
+      items.forEach(item => {
+        item.querySelector('.collapse').classList.remove('in');
+        if (item.querySelector('.collapse').id === id) {
+          document.getElementById(id).classList.add('in');
+        }
+      });
     }
   });
 
@@ -138,7 +142,7 @@ const accordionOne = () => {
     calcPopup.append(statusMessage);
     data.name = calcPopup.querySelector('#name_1').value;
     data.phone = calcPopup.querySelector('#phone_1').value;
-    statusMessage.textContent = load;    
+    statusMessage.textContent = load;
     postData(data, () => {
       statusMessage.textContent = success;
       calcPopup.querySelectorAll('input').forEach(item => item.value = '');

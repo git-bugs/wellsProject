@@ -1,7 +1,8 @@
 const consultation = () => {
   const popupConsultation = document.querySelector('.popup-consultation'),
     form = document.querySelector('.popup-consultation .capture-form'),
-    director = document.querySelector('.director');
+    director = document.querySelector('.director'),
+    question = director.querySelector('input');
 
   const popupAnimate = (id) => {
     const modal = document.querySelector(id);
@@ -32,6 +33,7 @@ const consultation = () => {
     request.setRequestHeader('Content-Type', 'multipart/json');
     request.send(JSON.stringify(body));
   };
+
   const sendData = () => {
     const error = 'Ошибка',
       load = 'Идет отправка',
@@ -45,19 +47,34 @@ const consultation = () => {
     formData.forEach((val, key) => {
       body[key] = val;
     });
-    body.question = director.querySelector('input').value;
+    body.question = question.value;
     postData(body, () => {
       statusMessage.textContent = success;
-      popupConsultation.querySelectorAll('input').forEach(item => item.value = '');
-      setTimeout(() => form.lastChild.remove(), 3000);
+      setTimeout(() => {
+        form.lastChild.remove();
+        popupConsultation.querySelectorAll('input').forEach(item => item.value = '');
+        question.value = '';
+      }, 3000);
     }, () => {
       statusMessage.textContent = error;
       console.error(error);
       setTimeout(() => form.lastChild.remove(), 3000);
     });
-
-
   };
+
+  const questValid = target =>{
+    target.addEventListener('input', () => {
+      target.value = target.value.replace(/[^а-я\.\,\- ]/i, '');
+    })
+  };
+
+  director.addEventListener('click', event => {
+    let target = event.target;
+    if (target.name === 'user_quest') {
+      questValid(target);
+    }
+  })
+
   popupConsultation.addEventListener('submit', (event) => {
     event.preventDefault();
     sendData();
